@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+{% if search_domain %}
+search {{ search_domain |e }}
+{% endif %}
+
+{% if nameserver1 %}
+nameserver {{ nameserver1 }}
+{% endif %}
+{% if nameserver2 %}
+nameserver {{ nameserver2 }}
+{% endif %}

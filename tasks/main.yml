@@ -1,0 +1,48 @@
+---
+
+- name: Disable systemd-resolved
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+  become: yes
+
+- name: Verify /etc/resolv.conf is a link
+  stat:
+    path: /etc/resolv.conf
+  register: resolv_conf_st
+
+- debug:
+  var: resolv_conf_st
+  verbosity: 2
+
+- name: Remove /etc/resolv.conf
+  file:
+    path: /etc/resolv.conf
+    state: absent
+  when: resolv_conf_st.stat.islnk == True
+  become: yes
+
+- name: Create /etc/resolv.conf
+  template:
+    src: templates/resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0444'
+  become: yes
+
+- name: Set dns
+  template:
+    src: templates/NetworkManager.conf.j2
+    dest: /etc/NetworkManager/NetworkManager.conf
+    owner: root
+    group: root
+    mode: '0444'
+  become: yes
+
+- name: Restart service network-manager
+  service:
+    name: network-manager
+    state: restarted
+  become: yes

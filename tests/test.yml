@@ -1,0 +1,7 @@
+---
+- name: Disable systemd-resolved
+  hosts: [all]
+  become: yes
+
+  roles:
+    - role: gcoop-libre.systemd_resolved
