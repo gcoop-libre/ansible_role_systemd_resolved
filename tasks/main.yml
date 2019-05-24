@@ -13,8 +13,8 @@
   register: resolv_conf_st
 
 - debug:
-  var: resolv_conf_st
-  verbosity: 2
+    var: resolv_conf_st
+    verbosity: 2
 
 - name: Remove /etc/resolv.conf
   file:
